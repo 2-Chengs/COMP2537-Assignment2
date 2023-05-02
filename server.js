@@ -136,7 +136,7 @@ app.post('/submitLogin', async (req, res) => {
 	   return;
 	}
 
-    const result = await userCollection.find({email: email}).project({username: 1, password: 1, _id: 1}).toArray();
+    const result = await userCollection.find({email: email}).project({username: 1, password: 1, _id: 1, admin: 1}).toArray();
     if (result.length != 1) {
 		console.log("user not found");
 		res.send('<h1>User Not Found</h1> <a href="/login"><button>Back</button></a>');
@@ -148,8 +148,9 @@ app.post('/submitLogin', async (req, res) => {
 		req.session.authenticated = true;
 		req.session.email = email;
         req.session.name  = result[0].username;
+        req.session.admin = result[0].admin;
 		req.session.cookie.maxAge = expireTime;
-
+        console.log(result[0].username)
 		res.redirect('/members');
 		return;
 	}
@@ -186,6 +187,11 @@ app.get('/logout', (req,res) => {
 });
 
 app.get('/admin', async (req, res) => {
+    console.log(req.session.admin);
+    if(!req.session.admin) {
+        res.redirect("/");
+        return;
+    }
     try {
         const result = await userCollection.find().toArray();
         res.render('admin', {pageTitle: 'admin', users: result});
