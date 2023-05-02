@@ -1,0 +1,32 @@
+<%- include('partials/header')  %>
+
+<main>
+    
+    <div class="p-5">
+        <h1>This is the Admin Page</h1>
+        <p>Here is a list of all the users registered</p>
+        <ul>
+
+            <% users.forEach(function(user){ %>
+
+                <div class="card w-75 p-3">
+                    <div class="card-body">
+                      <h5 class="card-title"><%= user.username%></h5>
+                      <p class="card-text">Email: <%= user.email %></p>
+                      <p class="card-text">Role: <%= user.admin ? "Admin" : "User" %></p>
+                      <form method="POST" action="/makeAdmin">
+                        <input type="hidden" name="email" value="<%= user.email %>">
+                        <button type="submit" class="btn <%= user.admin ? 'btn-success' : 'btn-danger' %>">
+                            <%= user.admin ? 'Make User' : 'Make Admin' %>
+                          </button>
+                        
+                      </form>
+                    </div>
+                  </div>
+            <% }) %>
+        </ul>
+    </div>
+
+</main>
+
+<%- include('partials/footer')  %>
