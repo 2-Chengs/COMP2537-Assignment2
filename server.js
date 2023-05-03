@@ -150,7 +150,6 @@ app.post('/submitLogin', async (req, res) => {
         req.session.name  = result[0].username;
         req.session.admin = result[0].admin;
 		req.session.cookie.maxAge = expireTime;
-        console.log(result[0].username)
 		res.redirect('/members');
 		return;
 	}
