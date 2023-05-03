@@ -188,7 +188,7 @@ app.get('/logout', (req,res) => {
 app.get('/admin', async (req, res) => {
     console.log(req.session.admin);
     if(!req.session.admin) {
-        res.redirect("/");
+        res.render("401", {pageTitle: '401'});
         return;
     }
     try {
