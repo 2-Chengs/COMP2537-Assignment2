@@ -187,10 +187,16 @@ app.get('/logout', (req,res) => {
 
 app.get('/admin', async (req, res) => {
     console.log(req.session.admin);
+    if (!req.session.authenticated) {
+        res.redirect("/");
+        return;
+    }
+
     if(!req.session.admin) {
         res.render("401", {pageTitle: '401'});
         return;
     }
+    
     try {
         const result = await userCollection.find().toArray();
         res.render('admin', {pageTitle: 'admin', users: result});
@@ -203,7 +209,7 @@ app.get('/admin', async (req, res) => {
 })
 
 app.get("*", (req, res) => {
-    res.send("404");
+    res.render("404", {pageTitle: '404'});
 })
 
 app.listen(PORT, () => {
